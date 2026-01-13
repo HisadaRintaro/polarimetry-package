@@ -1,5 +1,5 @@
 [project]
-name = "polarimetry-packaging"
+name = "polarimetry-package"
 version = "0.1.0"
 description = ""
 authors = [
@@ -19,7 +19,7 @@ dependencies = [
 ]
 
 [tool.poetry]
-packages = [{include = "polarimetry_packaging", from = "src"}]
+packages = [{include = "polarimetry_package", from = "src"}]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

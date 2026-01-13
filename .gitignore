@@ -9,6 +9,9 @@ __pycache__/
 # Poetry
 .poetry/
 
+#matplotlib
+matplotlibrc
+
 # OS
 .DS_Store
 
