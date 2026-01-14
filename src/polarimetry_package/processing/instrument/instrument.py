@@ -1,16 +1,21 @@
 from dataclasses import dataclass
-#from .image_set import ImageSet
-from ..io import reader
-
+from pathlib import Path
 
 @dataclass(frozen=True)
 class InstrumentModel:
     file_directry: str
     suffix:str
     extension: str 
+    
+    @staticmethod
+    def get_path_list(file_directry: str, suffix: str, extension: str) -> list[Path]:
+        path = Path(file_directry)
+        pattern = f"*{suffix}{extension}"
+        path_list = list(path.glob(pattern))
+        return path_list
 
     def path_list(self) -> list:
-        return reader.get_path_list(
+        return self.get_path_list(
                                 file_directry= self.file_directry,
                                 suffix= self.suffix,
                                 extension=self.extension

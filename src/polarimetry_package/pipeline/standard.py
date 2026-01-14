@@ -1,10 +1,10 @@
-from ..models.instrument import InstrumentModel
-from ..models.image_set import ImageSet
-from ..models.flux_image import FluxImage
-from ..models.stokes_set import StokesParameter, PolarizationDegree, PositionAngle
-from ..models.transmittance import Wave
-from ..models.area import Area
-from ..models.result import PolarimetryResult
+from ..processing.instrument.instrument import InstrumentModel
+from ..processing.image.image_set import ImageSet
+from ..processing.flux.flux_image import FluxImage
+from ..processing.stokes.stokes_set import StokesParameter, PolarizationDegree, PositionAngle
+from ..processing.stokes.transmittance import Wave
+from ..processing.models.area import Area
+from .result import PolarimetryResult
 
 def run_pipeline(
     instrument: InstrumentModel,

@@ -1,7 +1,7 @@
 from typing import Any
 import numpy as np
 from dataclasses import dataclass
-from ..processing import binning_image
+from ..image.binning import binning_image
 
 @dataclass
 class Noise:
@@ -21,6 +21,3 @@ class Noise:
                     self.count_noise**2, bin_size
                     ) + bin_size**2 * self.background_noise**2
                 )
-
-        
-

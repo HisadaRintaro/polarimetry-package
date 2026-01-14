@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Literal
 import numpy as np
-from ..area import RectangleArea
+from .area import RectangleArea
 
 class NoiseMixin(ABC):
     @abstractmethod

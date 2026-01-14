@@ -2,20 +2,9 @@ from dataclasses import dataclass
 import numpy as np
 import stsynphot
 from typing import Self
-from .header import HeaderRaw
-from ..plotting.base import setup_ax
+from ..models.header import HeaderRaw
+from ..models.wave import Wave
 
-@dataclass
-class Wave:
-    wave_min: float
-    wave_max: float
-    wave_len: int
-
-    def array(self) -> np.ndarray:
-        return np.linspace(self.wave_min, self.wave_max, self.wave_len)
-
-    def differential(self) -> float:
-        return (self.wave_max - self.wave_min) / self.wave_len
 
 @dataclass
 class Transmittance:
@@ -73,26 +62,27 @@ class Transmittance:
 
         return (trans_pol* trans_filter).sum() * wave_diff / (trans_filter.sum() * wave_diff)
 
-    def plot_curve(
-        self,
-        wave: Wave,
-        ax= None,
-        label= None,
-        title= None,
-        times= 10,
-        ymax= 1,
-        **kwargs,
-        ):
-
-        ax = setup_ax(ax)
-        trans_curve = self.trans_curve_pol(wave.array())
-        if self.orientation == "per":
-            trans_curve = trans_curve * times
-            label = f"{label}(x{times})"
-        ax.plot(wave.array(), trans_curve, label=label, **kwargs)
-        ax.set_ylim(0,ymax)
-
-        if title:
-            ax.set_title(title)
-        
-        return ax
+#plotting/stokes_plottingへ移植済み(2026.1.14)
+#    def plot_curve(
+#        self,
+#        wave: Wave,
+#        ax= None,
+#        label= None,
+#        title= None,
+#        times= 10,
+#        ymax= 1,
+#        **kwargs,
+#        ):
+#
+#        ax = setup_ax(ax)
+#        trans_curve = self.trans_curve_pol(wave.array())
+#        if self.orientation == "per":
+#            trans_curve = trans_curve * times
+#            label = f"{label}(x{times})"
+#        ax.plot(wave.array(), trans_curve, label=label, **kwargs)
+#        ax.set_ylim(0,ymax)
+#
+#        if title:
+#            ax.set_title(title)
+#        
+#        return ax

@@ -1,4 +1,6 @@
-from polarimetry_package.models import InstrumentModel, RectangleArea, CircleArea, Wave
+import matplotlib.pyplot as plt
+from polarimetry_package.processing import InstrumentModel
+from polarimetry_package.processing.models import RectangleArea, CircleArea, Wave
 from polarimetry_package.pipeline import run_pipeline
 
 directry= "FOC_POL_C1F/"
@@ -26,10 +28,13 @@ pa_ax = background_area.plot_region(ax=pa_ax)
 
 
 #transmittance curves
-from polarimetry_package.models import MuellerMatrixFactory
-mueller_matrix_factory = MuellerMatrixFactory.load(result.flux.hdr_profile, wave)
-trans_ax = mueller_matrix_factory.plot_transmittance_curve(wave)
+from polarimetry_package.processing import DemodulationMatrixFactory
+from polarimetry_package.plotting import plot_transmittance_curve
+demodulation_matrix_factory = DemodulationMatrixFactory.load(result.flux.hdr_profile, wave)
+trans_ax = plot_transmittance_curve(demodulation_matrix_factory, wave)
 
 #stokes panel
 from polarimetry_package.plotting import show_stokes_panel
 show_stokes_panel(result.stokes.I, result.stokes.Q, result.stokes.U)
+
+plt.show()

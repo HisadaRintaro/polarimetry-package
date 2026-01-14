@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from typing import Self
 from .transmittance import Transmittance, Wave
-from .header import HeaderRaw
+from ..models.header import HeaderRaw
+from ..models.wave import Wave
 
 @dataclass
 class PolarrizationEfficiency:

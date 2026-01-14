@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from typing import Literal, cast
 import numpy as np
 from matplotlib.colors import Normalize
-from ..area import RectangleArea
-from ...plotting.util import get_norm
+from ..processing.models.area import RectangleArea
+from .util import get_norm
 
 
 class ImagePlotMixin(ABC):

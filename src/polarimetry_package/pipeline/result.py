@@ -1,6 +1,6 @@
-from ..models.image_set import ImageSet
-from ..models.flux_image import FluxImage
-from ..models.stokes_set import StokesParameter, PolarizationDegree, PositionAngle
+from ..processing.image.image_set import ImageSet
+from ..processing.flux.flux_image import FluxImage
+from ..processing.stokes.stokes_set import StokesParameter, PolarizationDegree, PositionAngle
 from dataclasses import dataclass
 
 @dataclass(frozen=True)

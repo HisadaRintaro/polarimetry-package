@@ -5,15 +5,15 @@ import scipy
 from typing import Any, Literal
 from copy import deepcopy
 #from .flux_image import FluxImage
-from .instrument import InstrumentModel
-from .header import HeaderProfile
-from .area import Area
-from .noise_set import Noise
-from .mixin.plot_mixin import ImagePlotMixin
-from .mixin.noise_mixin import NoiseMixin
-from ..io import reader
-from ..processing import shift, background, binning
-from ..util.decorator import record_step
+from ..instrument.instrument import InstrumentModel
+from ..models.header import HeaderProfile, HeaderRaw
+from ..models.noise_set import Noise
+from ..models.area import Area
+from ...plotting.plot_mixin import ImagePlotMixin
+from ..models.noise_mixin import NoiseMixin
+from ...util.reader import read_file
+from . import shift, background, binning
+from ...util.decorator import record_step
 
 @dataclass(frozen=True)
 class ImageSet(ImagePlotMixin, NoiseMixin):
@@ -36,11 +36,27 @@ class ImageSet(ImagePlotMixin, NoiseMixin):
             f"status={self.status}\n "
             f")"
         )
-    
+
+    @staticmethod
+    def load_data(path_list: list) -> tuple[dict[str, np.ndarray | None], HeaderProfile]:
+        dat_dict: dict[str, np.ndarray | None] = {}
+        hdr_dict: dict[str, HeaderRaw] = {}
+
+        for path in path_list:
+            data, header = read_file(path)
+            hdr = HeaderRaw.parse_header(header)
+            filename: str = path.name
+            dat_dict[filename] = data
+            hdr_dict[filename] = hdr
+
+        hdr_profile = HeaderProfile(raw= hdr_dict)
+
+        return dat_dict, hdr_profile
+        
     @classmethod
     def load(cls, instrument_info: InstrumentModel) -> Self:
         path_list = instrument_info.path_list()
-        data, hdr_profile = reader.load_data(path_list)
+        data, hdr_profile = cls.load_data(path_list)
 
         return cls(data= data, noise= None, 
                         hdr_profile= hdr_profile,

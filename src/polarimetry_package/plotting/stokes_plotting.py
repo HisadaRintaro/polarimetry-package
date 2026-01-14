@@ -1,10 +1,13 @@
 from matplotlib.colors import Normalize
 from typing import cast
 import matplotlib.pyplot as plt
+
+from ..processing.stokes.transmittance import Transmittance
 from .base import setup_ax, add_colorbar
 from .util import make_grid, plot_line
-from ..models.area import RectangleArea
+from ..processing.models.area import RectangleArea
 from .util import get_norm
+from ..processing.stokes.demodulation_matrix import DemodulationMatrixFactory, Wave
 
 
 def plot_stokes_para(
@@ -62,6 +65,7 @@ def show_stokes_panel(
         n += 1
     return axes
 
+
 def plot_position_angle(
     back_image,
     position_angle,
@@ -99,6 +103,47 @@ def plot_position_angle(
             )
     return ax
 
+def plot_curve(
+    transmittance: Transmittance,
+    wave: Wave,
+    ax= None,
+    label= None,
+    title= None,
+    times= 10,
+    ymax= 1,
+    **kwargs,
+    ):
 
+    ax = setup_ax(ax)
+    trans_curve = transmittance.trans_curve_pol(wave.array())
+    if transmittance.orientation == "per":
+        trans_curve = trans_curve * times
+        label = f"{label}(x{times})"
+    ax.plot(wave.array(), trans_curve, label=label, **kwargs)
+    ax.set_ylim(0,ymax)
+
+    if title:
+        ax.set_title(title)
+    
+    return ax
+
+def plot_transmittance_curve(
+        demodulation_matrix_factory: DemodulationMatrixFactory,
+        wave: Wave,
+        ax= None,
+        ymax=1,
+        **kwargs
+        ):
+    ax = setup_ax(ax)
+
+    for pol, pol_eff in demodulation_matrix_factory.polarization_eff.items():
+        ax = plot_curve(pol_eff.major, wave, label= f"{pol}_major", ax=ax, ymax=ymax, **kwargs)
+        ax = plot_curve(pol_eff.minor, wave, label= f"{pol}_minor", ax=ax, ymax=ymax, **kwargs)
+
+    ax.set_xlabel("$wave length [ \\AA ]$")
+    ax.set_ylabel("transmittance")
+    ax.legend()
+    ax.grid(True)
+    return ax
 
 

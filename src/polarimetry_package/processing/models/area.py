@@ -3,7 +3,7 @@ from dataclasses import dataclass, replace
 from typing import Any, Self
 import numpy as np
 from matplotlib.patches import Patch, Rectangle, Circle
-from .mixin.area_mixin import AreaPlotMixin
+#from .mixin.area_mixin import AreaPlotMixin
 
 @dataclass
 class Area(ABC):
@@ -20,9 +20,36 @@ class Area(ABC):
     def __mul__(self, other) -> Self:
         pass
 
+    @abstractmethod
+    def to_patch(self, **kwargs) -> Patch:
+        "return matplotlib patch"
+        pass
+
+    def plot_region(
+            self,
+            ax = None,
+            *,
+            color= "red",
+            linewidth = 2,
+            alpha = 1.0,
+            **kwargs,
+            ):
+        import matplotlib.pyplot as plt
+
+        if ax is None:
+            _, ax = plt.subplots()
+
+        patch = self.to_patch(
+                edgecolor = color,
+                linewidth = linewidth,
+                alpha = alpha,
+                **kwargs,
+                )
+        ax.add_patch(patch)
+        return ax
 
 @dataclass
-class RectangleArea(Area, AreaPlotMixin):
+class RectangleArea(Area):
     x0: int
     x1: int
     y0: int
@@ -67,7 +94,7 @@ class RectangleArea(Area, AreaPlotMixin):
 
 
 @dataclass
-class CircleArea(Area, AreaPlotMixin):
+class CircleArea(Area):
     radius: float
     cx: int
     cy: int

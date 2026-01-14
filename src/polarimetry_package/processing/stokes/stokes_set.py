@@ -2,11 +2,11 @@ from dataclasses import dataclass
 from typing import Self, Literal
 import numpy as np
 
-from .transmittance import Wave
-from .flux_image import FluxImage
-from .mueller_matrix import MuellerMatrixFactory
-from .mixin.plot_mixin import ImagePlotMixin
-from .mixin.noise_mixin import NoiseMixin
+from ..flux.flux_image import FluxImage
+from .demodulation_matrix import DemodulationMatrixFactory
+from ...plotting.plot_mixin import ImagePlotMixin
+from ..models.noise_mixin import NoiseMixin
+from ..models.wave import Wave
 
 @dataclass(frozen=True)
 class StokesParameter(ImagePlotMixin, NoiseMixin):
@@ -35,7 +35,7 @@ class StokesParameter(ImagePlotMixin, NoiseMixin):
     
     @classmethod
     def load(cls, flux_image: FluxImage, wave: Wave) -> Self:
-        mueller_matrix = MuellerMatrixFactory.load(flux_image.hdr_profile, wave).matrix()
+        mueller_matrix = DemodulationMatrixFactory.load(flux_image.hdr_profile, wave).matrix()
         I, Q, U = cls.apply_mueller_matrix(flux_image.flux, mueller_matrix)
         noise_I, noise_Q, noise_U = cls.apply_mueller_matrix(flux_image.noise, mueller_matrix)
         return cls(

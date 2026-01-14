@@ -1,11 +1,11 @@
 from dataclasses import dataclass, replace
 import numpy as np
 from typing import Self, Literal
-from .image_set import ImageSet
-from .header import HeaderProfile
-from .mixin.plot_mixin import ImagePlotMixin
-from .mixin.noise_mixin import NoiseMixin
-from ..processing import flux
+from ..image.image_set import ImageSet
+from ..models.header import HeaderProfile
+from ...plotting.plot_mixin import ImagePlotMixin
+from ..models.noise_mixin import NoiseMixin
+from . import flux
 
 @dataclass(frozen=True)
 class FluxImage(ImagePlotMixin, NoiseMixin):

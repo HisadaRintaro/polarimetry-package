@@ -2,13 +2,12 @@ from dataclasses import dataclass
 from typing import Self
 import numpy as np
 from .polarization_efficiency import PolarrizationEfficiency
-from .transmittance import Wave
-from .header import HeaderProfile
-from ..plotting.base import setup_ax
+from ..models.header import HeaderProfile
+from ..models.wave import Wave
 
 
 @dataclass
-class MuellerMatrixFactory:
+class DemodulationMatrixFactory:
     polarization_eff: dict[str, PolarrizationEfficiency]
     wave: Wave
 
@@ -47,16 +46,17 @@ class MuellerMatrixFactory:
                                          [a2_1,a2_2,a2_3],
                                          [a3_1,a3_2,a3_3]])
         return mueller_matrix
-
-    def plot_transmittance_curve(self, wave: Wave, ax= None, ymax=1, **kwargs):
-        ax = setup_ax(ax)
-
-        for pol, pol_eff in self.polarization_eff.items():
-            ax = pol_eff.major.plot_curve(wave, label= f"{pol}_major", ax=ax, ymax=ymax, **kwargs)
-            ax = pol_eff.minor.plot_curve(wave, label= f"{pol}_minor", ax=ax, ymax=ymax, **kwargs)
-
-        ax.set_xlabel("$wave length [ \\AA ]$")
-        ax.set_ylabel("transmittance")
-        ax.legend()
-        ax.grid(True)
-        return ax
+    
+#plotting/stokes_plottingへ移植済み（2026.1.14）
+#    def plot_transmittance_curve(self, wave: Wave, ax= None, ymax=1, **kwargs):
+#        ax = setup_ax(ax)
+#
+#        for pol, pol_eff in self.polarization_eff.items():
+#            ax = pol_eff.major.plot_curve(wave, label= f"{pol}_major", ax=ax, ymax=ymax, **kwargs)
+#            ax = pol_eff.minor.plot_curve(wave, label= f"{pol}_minor", ax=ax, ymax=ymax, **kwargs)
+#
+#        ax.set_xlabel("$wave length [ \\AA ]$")
+#        ax.set_ylabel("transmittance")
+#        ax.legend()
+#        ax.grid(True)
+#        return ax
