@@ -10,7 +10,16 @@ This package provides:
 
 ## Installation
 
-This project is managed with Poetry.
+Install dependencies:
+
+```bash
+# Recommended: create a virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Or on Windows
+.venv\Scripts\activate
+```
 
 ```bash
 git clone https://github.com/HisadaRintaro/polarimetry-package.git
@@ -18,7 +27,7 @@ cd polarimetry_package
 poetry install
 ```
 
-Or, also pip can be used.
+Or, without Poetry(using pip).
 
 ```bash
 git clone https://github.com/HisadaRintaro/polarimetry-package.git
@@ -56,7 +65,7 @@ src/polarimetry_package/
 ├── util/            # Small helpers (reader, decorators)
 ```
 
-## Basic usage
+## Quick start
 
 A standard analysis can be executed via the pipeline interface.
 
@@ -64,31 +73,12 @@ A standard analysis can be executed via the pipeline interface.
 from polarimetry_package.pipeline.standard import StandardPipeline
 from polarimetry_package.processing import InstrumentModel
 from polarimetry_package.processing.models import RectangleArea, CircleArea, Wave
-```
 
----variables example---
-
-```python
-directry= "FOC_POL_C1F/"
-rectangle = RectangleArea(x0=300, x1=400, y0=100, y1=200) 
-circle = CircleArea(radius=50, cx=350, cy=150)
-background_area = circle #optional area (rectangle or circle)
-image_area = RectangleArea(x0=13, x1=43, y0=15, y1=51) #image plottin area with use plot(area=image_area)
+inst = InstrumentModel(file_directry="FOC_POL_C1F")
+area = RectangleArea(x0=300, x1=400, y0=100, y1=200) 
 wave = Wave(1000,10000,5000) # unit=Å, instrument covering wavelength
-bin_size = 10
-```
 
----processing---
-
-```python
-instrument: InstrumentModel = InstrumentModel(file_directry=directry, suffix= "", extension= "")
-pipeline = StandardPipleline(
-    instrument=instrument,
-    area= background_area,
-    bin_size= bin_size,
-    wave= wave,
-)
-
+pipeline = StandardPipleline(inst, area, bin_size=10, wave=wave)
 result = pipeline.run()
 ```
 
