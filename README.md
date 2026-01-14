@@ -18,6 +18,15 @@ cd polarimetry_package
 poetry install
 ```
 
+Or, also pip can be used.
+
+```bash
+git clone https://github.com/HisadaRintaro/polarimetry-package.git
+cd polarimetry_package
+pip install .
+```
+
+
 ## stsynphot data setup
 
 This project uses `stsynphot` for instrument throughput and calibration.
